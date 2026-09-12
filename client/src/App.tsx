@@ -16,19 +16,9 @@ function App() {
   }, [fetchHabits, fetchHabitLogs, fetchMilestones]);
 
   return (
-    <div style={{ display: 'flex', height: '100vh', width: '100vw', overflow: 'hidden' }}>
-
+    <div className="app-container">
       {/* Sidebar */}
-      <div style={{
-        width: '260px',
-        backgroundColor: 'var(--panel-bg)',
-        borderRight: '1px solid var(--border-color)',
-        padding: '2rem 1.25rem',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '0.75rem',
-        flexShrink: 0
-      }}>
+      <div className="sidebar">
         <div style={{ padding: '0 0.5rem', marginBottom: '1.5rem' }}>
           <h2 style={{ fontSize: '1.3rem', display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#f8fafc', margin: 0 }}>
             <Target size={26} color="var(--accent-color)" />
@@ -60,7 +50,7 @@ function App() {
           <Trophy size={18} color={activeTab === 'milestones' ? '#c084fc' : 'currentColor'} /> Bitácora de Victorias
         </button>
 
-        <div style={{ marginTop: 'auto', padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '10px', border: '1px solid var(--border-color)', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+        <div className="sidebar-footer" style={{ marginTop: 'auto', padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '10px', border: '1px solid var(--border-color)', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: '#f59e0b', fontWeight: 'bold', marginBottom: '0.2rem' }}>
             <Sparkles size={12} /> Regla del 20%
           </div>
@@ -69,7 +59,7 @@ function App() {
       </div>
 
       {/* Main Content Area */}
-      <div style={{ flex: 1, padding: '2rem', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+      <div className="main-content">
         <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
           <h1 style={{ margin: 0, fontSize: '1.75rem' }}>
             {activeTab === 'habits' && 'Rastreador de Hábitos & Momentum'}

@@ -134,7 +134,7 @@ export const HabitTracker = () => {
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap' }}>
+        <div className="stats-container">
           <div style={{ textAlign: 'center', background: 'rgba(0,0,0,0.25)', padding: '0.6rem 1rem', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
             <div style={{ fontSize: '0.75rem', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem' }}>
               <Sparkles size={13} /> Días Ideales (7d)
@@ -157,7 +157,7 @@ export const HabitTracker = () => {
       </div>
 
       {/* Action Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+      <div className="header-actions" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
           <h2 style={{ margin: 0, fontSize: '1.35rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <Activity size={22} color="var(--accent-color)" /> Dashboard de Hábitos
@@ -195,7 +195,7 @@ export const HabitTracker = () => {
             </button>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr auto', gap: '0.75rem', alignItems: 'flex-end' }}>
+          <div className="habit-form-grid">
             <div>
               <label style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '0.25rem' }}>Nombre de la Actividad *</label>
               <input 
