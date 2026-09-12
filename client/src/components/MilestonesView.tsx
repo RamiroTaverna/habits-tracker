@@ -225,7 +225,7 @@ export const MilestonesView = () => {
                       padding: '0.2rem 0.5rem',
                       borderRadius: '4px'
                     }}>
-                      <Calendar size={13} /> {m.date}
+                      <Calendar size={13} /> {formatDate(m.date)}
                     </span>
 
                     {linkedHabit ? (

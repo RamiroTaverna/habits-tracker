@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { Habit, HabitLog } from '../store/useStore';
 import { getPastDaysArray } from '../utils/dateUtils';
-import { Target, TrendingUp, TrendingDown, Activity, Info } from 'lucide-react';
+import { TrendingUp, BarChart2 } from 'lucide-react';
 import { formatDate } from '../utils/dateUtils';
 
 interface HabitTrendChartProps {
