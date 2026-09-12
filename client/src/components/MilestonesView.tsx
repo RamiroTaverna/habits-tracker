@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useStore } from '../store/useStore';
-import { getLocalDateString } from '../utils/dateUtils';
+import { formatDate, getLocalDateString } from '../utils/dateUtils';
 import { Trophy, Plus, Calendar, Tag, Trash2, Sparkles, Filter } from 'lucide-react';
 
 export const MilestonesView = () => {

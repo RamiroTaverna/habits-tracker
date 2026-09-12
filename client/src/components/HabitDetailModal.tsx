@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useStore } from '../store/useStore';
 import type { Habit } from '../store/useStore';
 import { HabitTrendChart } from './HabitTrendChart';
-import { getLocalDateString } from '../utils/dateUtils';
+import { getLocalDateString, formatDate } from '../utils/dateUtils';
 import { X, Trophy, Plus, TrendingUp, ShieldCheck, Sparkles, Trash2, Edit3, Save } from 'lucide-react';
 
 interface HabitDetailModalProps {
@@ -391,7 +391,7 @@ export const HabitDetailModal: React.FC<HabitDetailModalProps> = ({ habit, onClo
                 }}>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
-                      <span style={{ fontSize: '0.75rem', color: '#a855f7', fontWeight: 'bold' }}>{m.date}</span>
+                      <span style={{ fontSize: '0.75rem', color: '#a855f7', fontWeight: 'bold' }}>{formatDate(m.date)}</span>
                       <strong style={{ fontSize: '0.95rem' }}>{m.title}</strong>
                     </div>
                     {m.description && (

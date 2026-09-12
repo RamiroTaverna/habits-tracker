@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useStore } from '../store/useStore';
 import type { Habit } from '../store/useStore';
 import { HabitDetailModal } from './HabitDetailModal';
-import { getLocalDateString, getPastDaysArray } from '../utils/dateUtils';
+import { getLocalDateString, getPastDaysArray, formatDate } from '../utils/dateUtils';
 import { 
   Plus, 
   ShieldCheck, 
@@ -374,7 +374,7 @@ export const HabitTracker = () => {
                                 ? '0 0 10px rgba(99, 102, 241, 0.25)'
                                 : 'none'
                             }}
-                            title={`${habit.name} (${date}): ${value > 0 ? `${value} ${habit.unit}` : 'Sin registrar'}`}
+                            title={`${habit.name} (${formatDate(date)}): ${value > 0 ? `${value} ${habit.unit}` : 'Sin registrar'}`}
                           >
                             {isIdeal ? (
                               <>
@@ -460,7 +460,7 @@ export const HabitTracker = () => {
               <div>
                 <h4 style={{ margin: 0, fontSize: '1.1rem' }}>{loggingCell.habit.name}</h4>
                 <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                  Fecha: <strong>{loggingCell.date}</strong>
+                  Fecha: <strong>{formatDate(loggingCell.date)}</strong>
                 </p>
               </div>
               <button 

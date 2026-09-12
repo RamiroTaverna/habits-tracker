@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import type { Habit, HabitLog } from '../store/useStore';
 import { getPastDaysArray } from '../utils/dateUtils';
-import { TrendingUp, BarChart2 } from 'lucide-react';
+import { Target, TrendingUp, TrendingDown, Activity, Info } from 'lucide-react';
+import { formatDate } from '../utils/dateUtils';
 
 interface HabitTrendChartProps {
   habit: Habit;
@@ -353,7 +354,7 @@ export const HabitTrendChart: React.FC<HabitTrendChartProps> = ({ habit, logs, d
           color: '#f8fafc'
         }}>
           <div style={{ fontWeight: 'bold', marginBottom: '0.25rem', display: 'flex', justifyContent: 'space-between', gap: '0.75rem' }}>
-            <span>{hoveredPoint.date}</span>
+            <span>{formatDate(hoveredPoint.date)}</span>
             <span style={{ 
               color: hoveredPoint.tier === 'ideal' 
                 ? '#10b981' 
