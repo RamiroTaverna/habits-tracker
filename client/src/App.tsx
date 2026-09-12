@@ -1,19 +1,45 @@
 import { useEffect, useState } from 'react';
 import { useStore } from './store/useStore';
-import { CheckSquare, Trophy, Target, Sparkles } from 'lucide-react';
+import { CheckSquare, Trophy, Target, Sparkles, Lock, LogOut } from 'lucide-react';
 import { HabitTracker } from './components/HabitTracker';
 import { MilestonesView } from './components/MilestonesView';
 import './index.css';
 
 function App() {
-  const { fetchHabits, fetchHabitLogs, fetchMilestones } = useStore();
+  const { fetchHabits, fetchHabitLogs, fetchMilestones, password, setPassword, logout } = useStore();
   const [activeTab, setActiveTab] = useState<'habits' | 'milestones'>('habits');
+  const [inputPassword, setInputPassword] = useState('');
 
   useEffect(() => {
-    fetchHabits();
-    fetchHabitLogs();
-    fetchMilestones();
-  }, [fetchHabits, fetchHabitLogs, fetchMilestones]);
+    if (password) {
+      fetchHabits();
+      fetchHabitLogs();
+      fetchMilestones();
+    }
+  }, [fetchHabits, fetchHabitLogs, fetchMilestones, password]);
+
+  if (!password) {
+    return (
+      <div className="login-container">
+        <div className="glass-panel login-panel">
+          <Lock size={48} color="var(--accent-color)" style={{ marginBottom: '1rem' }} />
+          <h2>Acceso Restringido</h2>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem' }}>Por favor, ingresa tu contraseña maestra para continuar.</p>
+          <form onSubmit={(e) => { e.preventDefault(); setPassword(inputPassword); }} style={{ width: '100%' }}>
+            <input 
+              type="password" 
+              placeholder="Contraseña" 
+              value={inputPassword}
+              onChange={(e) => setInputPassword(e.target.value)}
+              className="login-input"
+              autoFocus
+            />
+            <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '1rem' }}>Desbloquear</button>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="app-container">
@@ -65,6 +91,14 @@ function App() {
             {activeTab === 'habits' && 'Rastreador de Hábitos & Momentum'}
             {activeTab === 'milestones' && 'Bitácora de Victorias'}
           </h1>
+          <button 
+            className="btn btn-outline" 
+            onClick={logout} 
+            title="Cerrar sesión"
+            style={{ padding: '0.4rem 0.6rem' }}
+          >
+            <LogOut size={18} />
+          </button>
         </header>
 
         <main style={{ flex: 1 }}>

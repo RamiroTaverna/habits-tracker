@@ -7,6 +7,21 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Auth Middleware
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') return next();
+  
+  const expectedPassword = process.env.APP_PASSWORD;
+  if (!expectedPassword) return next(); // Skip if no password configured (local dev)
+  
+  const clientPassword = req.headers['x-app-password'];
+  if (clientPassword !== expectedPassword) {
+    return res.status(401).json({ error: 'No autorizado. Contraseña incorrecta.' });
+  }
+  
+  next();
+});
+
 // --- HABITS ENDPOINTS ---
 
 // Get all habits

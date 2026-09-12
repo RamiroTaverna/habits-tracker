@@ -33,6 +33,11 @@ interface AppState {
   habitLogs: HabitLog[];
   milestones: Milestone[];
   
+  // Auth state
+  password: string | null;
+  setPassword: (password: string) => void;
+  logout: () => void;
+  
   // Habits actions
   fetchHabits: () => Promise<void>;
   addHabit: (habit: Omit<Habit, 'id' | 'streak'>) => Promise<void>;
@@ -55,11 +60,25 @@ export const useStore = create<AppState>((set, get) => ({
   habits: [],
   habitLogs: [],
   milestones: [],
+  password: localStorage.getItem('app_password'),
+
+  setPassword: (password: string) => {
+    localStorage.setItem('app_password', password);
+    set({ password });
+  },
+
+  logout: () => {
+    localStorage.removeItem('app_password');
+    set({ password: null, habits: [], habitLogs: [], milestones: [] });
+  },
 
   // --- HABITS ---
   fetchHabits: async () => {
     try {
-      const res = await fetch(`${API_URL}/habits`);
+      const res = await fetch(`${API_URL}/habits`, {
+        headers: { 'x-app-password': get().password || '' }
+      });
+      if (res.status === 401) { get().logout(); return; }
       if (!res.ok) throw new Error(`HTTP error ${res.status}`);
       const data = await res.json();
       set({ habits: Array.isArray(data) ? data : [] });
@@ -82,9 +101,13 @@ export const useStore = create<AppState>((set, get) => ({
       };
       const res = await fetch(`${API_URL}/habits`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-app-password': get().password || ''
+        },
         body: JSON.stringify(newHabit),
       });
+      if (res.status === 401) { get().logout(); throw new Error('Unauthorized'); }
       if (!res.ok) throw new Error(`Failed to create habit: ${res.statusText}`);
       set({ habits: [...get().habits, newHabit] });
     } catch (error) {
@@ -100,9 +123,13 @@ export const useStore = create<AppState>((set, get) => ({
       const updatedHabit = { ...habit, ...updates };
       const res = await fetch(`${API_URL}/habits/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-app-password': get().password || ''
+        },
         body: JSON.stringify(updatedHabit),
       });
+      if (res.status === 401) { get().logout(); throw new Error('Unauthorized'); }
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}));
         throw new Error(errorData.error || `HTTP ${res.status}: ${res.statusText}`);
@@ -119,7 +146,9 @@ export const useStore = create<AppState>((set, get) => ({
     try {
       const res = await fetch(`${API_URL}/habits/${id}`, {
         method: 'DELETE',
+        headers: { 'x-app-password': get().password || '' }
       });
+      if (res.status === 401) { get().logout(); throw new Error('Unauthorized'); }
       if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
       set({
         habits: get().habits.filter((h) => h.id !== id),
@@ -135,7 +164,10 @@ export const useStore = create<AppState>((set, get) => ({
   // --- HABIT LOGS ---
   fetchHabitLogs: async () => {
     try {
-      const res = await fetch(`${API_URL}/habits/logs`);
+      const res = await fetch(`${API_URL}/habits/logs`, {
+        headers: { 'x-app-password': get().password || '' }
+      });
+      if (res.status === 401) { get().logout(); return; }
       if (!res.ok) throw new Error(`HTTP error ${res.status}`);
       const data = await res.json();
       set({ habitLogs: Array.isArray(data) ? data : [] });
@@ -149,7 +181,10 @@ export const useStore = create<AppState>((set, get) => ({
       const numValue = Number(value) || 0;
       const res = await fetch(`${API_URL}/habits/logs`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-app-password': get().password || ''
+        },
         body: JSON.stringify({
           habit_id,
           date,
@@ -158,6 +193,7 @@ export const useStore = create<AppState>((set, get) => ({
           notes,
         }),
       });
+      if (res.status === 401) { get().logout(); throw new Error('Unauthorized'); }
       if (!res.ok) throw new Error(`HTTP error ${res.status}`);
       
       // Update local state smoothly
@@ -178,7 +214,10 @@ export const useStore = create<AppState>((set, get) => ({
   // --- MILESTONES ---
   fetchMilestones: async () => {
     try {
-      const res = await fetch(`${API_URL}/milestones`);
+      const res = await fetch(`${API_URL}/milestones`, {
+        headers: { 'x-app-password': get().password || '' }
+      });
+      if (res.status === 401) { get().logout(); return; }
       if (!res.ok) throw new Error(`HTTP error ${res.status}`);
       const data = await res.json();
       set({ milestones: Array.isArray(data) ? data : [] });
@@ -200,9 +239,13 @@ export const useStore = create<AppState>((set, get) => ({
       };
       const res = await fetch(`${API_URL}/milestones`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-app-password': get().password || ''
+        },
         body: JSON.stringify(newMilestone),
       });
+      if (res.status === 401) { get().logout(); throw new Error('Unauthorized'); }
       if (!res.ok) throw new Error(`HTTP error ${res.status}`);
       set({ milestones: [newMilestone, ...get().milestones] });
     } catch (error) {
@@ -215,7 +258,9 @@ export const useStore = create<AppState>((set, get) => ({
     try {
       const res = await fetch(`${API_URL}/milestones/${id}`, {
         method: 'DELETE',
+        headers: { 'x-app-password': get().password || '' }
       });
+      if (res.status === 401) { get().logout(); throw new Error('Unauthorized'); }
       if (!res.ok) throw new Error(`HTTP error ${res.status}`);
       set({
         milestones: get().milestones.filter((m) => m.id !== id),
